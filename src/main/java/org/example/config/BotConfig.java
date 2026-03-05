@@ -1,6 +1,6 @@
 package org.example.config;
 
-import org.example.service.VacanciesBot;
+import org.example.bot.VacanciesBot;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.TelegramBotsApi;

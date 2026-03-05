@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.model.Vacancy;
-import org.example.service.scraper.Scraper;
+import org.example.scraper.Scraper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,21 +11,23 @@ import java.util.function.Function;
 public class WebScraperManager {
 
     private final List<Scraper> scrapers;
+    private final VacancyService vacancyService;
 
-    public WebScraperManager(List<Scraper> scrapers) {
+    public WebScraperManager(List<Scraper> scrapers, VacancyService vacancyService) {
         this.scrapers = scrapers;
+        this.vacancyService = vacancyService;
     }
 
     public List<Vacancy> scrapeJuniorVacancies() {
-        return scrape(Scraper::scrapeJunior);
+        return vacancyService.saveNew(scrape(Scraper::scrapeJunior), "junior");
     }
 
     public List<Vacancy> scrapeMiddleVacancies() {
-        return scrape(Scraper::scrapeMiddle);
+        return vacancyService.saveNew(scrape(Scraper::scrapeMiddle), "middle");
     }
 
     public List<Vacancy> scrapeSeniorVacancies() {
-        return scrape(Scraper::scrapeSenior);
+        return vacancyService.saveNew(scrape(Scraper::scrapeSenior), "senior");
     }
 
     private List<Vacancy> scrape(Function<Scraper, List<Vacancy>> method) {

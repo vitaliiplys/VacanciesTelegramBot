@@ -1,4 +1,4 @@
-package org.example.service.scraper;
+package org.example.scraper;
 
 import org.example.model.Vacancy;
 

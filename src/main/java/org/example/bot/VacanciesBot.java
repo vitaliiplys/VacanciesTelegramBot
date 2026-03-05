@@ -1,6 +1,7 @@
-package org.example.service;
+package org.example.bot;
 
 import org.example.model.Vacancy;
+import org.example.service.WebScraperManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -81,7 +82,8 @@ public class VacanciesBot extends TelegramLongPollingBot {
                             "Middle вакансії — Java вакансії 1-3 роки досвіду\n" +
                             "Senior вакансії — Java вакансії 3-5 роки досвіду");
 
-            default -> sendMessage(chatId, "Натисніть кнопку або напишіть /help для довідки.");
+            default -> sendMessage(chatId,
+                    "Натисніть кнопку або напишіть /help для довідки або /start.");
         }
     }
 
@@ -90,23 +92,17 @@ public class VacanciesBot extends TelegramLongPollingBot {
         StringBuilder chunk = new StringBuilder(header);
 
         for (Vacancy v : vacancies) {
-
             String entry = """
 📌 %s
 🌍 Джерело: %s
 🔗 %s
 
-""".formatted(
-                    v.getTitle(),
-                    v.getSource(),
-                    v.getUrl()
-            );
+""".formatted(v.getTitle(), v.getSource(), v.getUrl());
 
             if (chunk.length() + entry.length() > MAX_LENGTH) {
                 sendMessage(chatId, chunk.toString());
                 chunk = new StringBuilder(header);
             }
-
             chunk.append(entry);
         }
 
@@ -123,6 +119,7 @@ public class VacanciesBot extends TelegramLongPollingBot {
 
         KeyboardRow row2 = new KeyboardRow();
         row2.add(new KeyboardButton("/help"));
+        row2.add(new KeyboardButton("/start"));
 
         ReplyKeyboardMarkup keyboard = ReplyKeyboardMarkup.builder()
                 .keyboardRow(row1)
@@ -142,7 +139,7 @@ public class VacanciesBot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendMessage(long chatId, String text) {
+    public void sendMessage(long chatId, String text) {
         SendMessage message = SendMessage.builder()
                 .chatId(chatId)
                 .text(text)

@@ -1,7 +1,7 @@
-package org.example.service.scraper.impl;
+package org.example.scraper.impl;
 
 import org.example.model.Vacancy;
-import org.example.service.scraper.Scraper;
+import org.example.scraper.Scraper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
